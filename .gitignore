@@ -1,3 +1,6 @@
 .idea/
 *.pyc
 __pycache__
+python_clients.egg-info/
+dist/
+build/
