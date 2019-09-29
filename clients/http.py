@@ -52,11 +52,11 @@ class Client:
             assert method.body is None, 'For GET method body must be empty'
             r = requests.get(url=url, params=method.params, headers=method.headers)
         elif m_type == 'POST':
-            r = requests.post(url=url, params=method.params, data=method.data, headers=method.headers)
+            r = requests.post(url=url, params=method.params, data=method.body, headers=method.headers)
         elif m_type == 'DELETE':
-            r = requests.delete(url=url, params=method.params, data=method.data, headers=method.headers)
+            r = requests.delete(url=url, params=method.params, data=method.body, headers=method.headers)
         elif m_type == 'PATCH':
-            r = requests.patch(url=url, params=method.params, data=method.data, headers=method.headers)
+            r = requests.patch(url=url, params=method.params, data=method.body, headers=method.headers)
         else:
             raise Exception("\nnot implemented method request: %s" % method.m_type)
 
