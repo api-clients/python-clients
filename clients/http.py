@@ -22,6 +22,7 @@ class Method:
     """
 
     def __init__(self, *args):
+        assert len(args) == self.count, f'count path args must by equal count. count: {self.count}. passed: {len(args)}'
         self.__args = args
 
     @property
