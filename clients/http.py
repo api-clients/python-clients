@@ -40,6 +40,11 @@ class Method:
 
 class Client:
     def __init__(self, endpoint):
+        """
+        This client implements http-client
+
+        :param endpoint: base url for requests
+        """
         self.endpoint = endpoint
 
     def __get_url(self, method):
