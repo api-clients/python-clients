@@ -20,10 +20,6 @@ class Method:
     def response_process(resp):
         return {}
 
-    @staticmethod
-    def request_process(req):
-        return req
-
 
 class Client:
     """
@@ -38,12 +34,12 @@ class Client:
         self.db_name = db_name
 
     def __args(self, method):
-        filter_ = method.filter
-        body = method.body
-        logging.info(f'mongodb client. get_cursor. name: {method.name}. body: {body}. filter: {filter_}')
-        body = method.request_process(body)
-        col = method.collection
-        return filter_, col, body
+        p = method.projection
+        q = method.query
+        p = method.request_process(p)
+        c = method.collection
+        logging.info(f'mongodb client. name: {method.name}. query: {q}. projection: {p}')
+        return p, c, q
 
     def get_cursor(self, method):
         proj, col, query = self.__args(method)
