@@ -36,7 +36,6 @@ class Client:
     def __args(self, method):
         p = method.projection
         q = method.query
-        p = method.request_process(p)
         c = method.collection
         logging.info(f'mongodb client. name: {method.name}. query: {q}. projection: {p}')
         return p, c, q
