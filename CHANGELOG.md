@@ -1,3 +1,8 @@
+# 0.1.3
+
+* change default count for http client
+* process response into function request
+
 # 0.1.2
 
 * remove request_porcess from method request
