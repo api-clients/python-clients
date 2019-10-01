@@ -69,5 +69,5 @@ class Client:
             logging.error(f'status code: {r.status_code}. text: {r._content}. method: {method}')
             raise Exception(f'status not 2xx. status code: {r.status_code}')
         if r is None:
-            method.response_process({})
+            return method.response_process({})
         return method.response_process(r.json())

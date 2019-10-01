@@ -1,3 +1,11 @@
+# 0.1.5
+
+* Empty response processing
+
+# 0.1.4
+
+* Raises for not 2xx statuses
+
 # 0.1.3
 
 * change default count for http client
