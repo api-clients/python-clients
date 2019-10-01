@@ -10,7 +10,7 @@ class Method:
     headers = None
     body = None
     params = None
-    count = 1
+    count = 0
     """
     :arg name: name of method 
     :arg type_: type of method (GET, POST, PUT etc...)
