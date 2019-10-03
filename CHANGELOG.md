@@ -1,3 +1,7 @@
+# 0.2.1
+
+* Fix bug into request. Bot pass body
+
 # 0.2.0
 
 * Add proxies

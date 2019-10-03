@@ -65,17 +65,17 @@ class Client:
             if self.proxies is None:
                 r = requests.post(url=url, params=method.params, data=method.body, headers=method.headers)
             else:
-                r = requests.post(url=url, params=method.params, headers=method.headers, proxies=self.proxies)
+                r = requests.post(url=url, params=method.params, data=method.body, headers=method.headers, proxies=self.proxies)
         elif m_type == 'DELETE':
             if self.proxies is None:
                 r = requests.delete(url=url, params=method.params, data=method.body, headers=method.headers)
             else:
-                r = requests.delete(url=url, params=method.params, headers=method.headers, proxies=self.proxies)
+                r = requests.delete(url=url, params=method.params, data=method.body, headers=method.headers, proxies=self.proxies)
         elif m_type == 'PATCH':
             if self.proxies is None:
                 r = requests.patch(url=url, params=method.params, data=method.body, headers=method.headers)
             else:
-                r = requests.delete(url=url, params=method.params, headers=method.headers, proxies=self.proxies)
+                r = requests.delete(url=url, params=method.params, data=method.body, headers=method.headers, proxies=self.proxies)
         else:
             raise Exception("\nnot implemented method request: %s" % method.m_type)
         if r.status_code // 100 != 2:
