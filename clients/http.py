@@ -39,13 +39,15 @@ class Method:
 
 
 class Client:
-    def __init__(self, endpoint):
+    def __init__(self, endpoint, proxies=None):
         """
         This client implements http-client
 
         :param endpoint: base url for requests
+        :param proxies: dict with proxies ({'schema': 'endpoint'})
         """
         self.endpoint = endpoint
+        self.proxies = proxies
 
     def __get_url(self, method):
         return f'{self.endpoint}{method.url}'
@@ -55,16 +57,27 @@ class Client:
         url = self.__get_url(method)
         if m_type == 'GET':
             assert method.body is None, 'For GET method body must be empty'
-            r = requests.get(url=url, params=method.params, headers=method.headers)
+            if self.proxies is None:
+                r = requests.get(url=url, params=method.params, headers=method.headers)
+            else:
+                r = requests.get(url=url, params=method.params, headers=method.headers, proxies=self.proxies)
         elif m_type == 'POST':
-            r = requests.post(url=url, params=method.params, data=method.body, headers=method.headers)
+            if self.proxies is None:
+                r = requests.post(url=url, params=method.params, data=method.body, headers=method.headers)
+            else:
+                r = requests.post(url=url, params=method.params, headers=method.headers, proxies=self.proxies)
         elif m_type == 'DELETE':
-            r = requests.delete(url=url, params=method.params, data=method.body, headers=method.headers)
+            if self.proxies is None:
+                r = requests.delete(url=url, params=method.params, data=method.body, headers=method.headers)
+            else:
+                r = requests.delete(url=url, params=method.params, headers=method.headers, proxies=self.proxies)
         elif m_type == 'PATCH':
-            r = requests.patch(url=url, params=method.params, data=method.body, headers=method.headers)
+            if self.proxies is None:
+                r = requests.patch(url=url, params=method.params, data=method.body, headers=method.headers)
+            else:
+                r = requests.delete(url=url, params=method.params, headers=method.headers, proxies=self.proxies)
         else:
             raise Exception("\nnot implemented method request: %s" % method.m_type)
-
         if r.status_code // 100 != 2:
             logging.error(f'status code: {r.status_code}. text: {r._content}. method: {method}')
             raise Exception(f'status not 2xx. status code: {r.status_code}')
