@@ -81,6 +81,10 @@ class Client:
         if r.status_code // 100 != 2:
             logging.error(f'status code: {r.status_code}. text: {r._content}. method: {method}')
             raise Exception(f'status not 2xx. status code: {r.status_code}')
-        if r is None:
+        try:
+            if r is None or len(r.content) == 0:
+                return method.response_process({})
+            return method.response_process(r.json())
+        except Exception as e:
+            logging.info(f'not a json response: {e}')
             return method.response_process({})
-        return method.response_process(r.json())

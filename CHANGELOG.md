@@ -1,3 +1,7 @@
+# 0.2.2
+
+* Response processing error adding
+
 # 0.2.1
 
 * Fix bug into request. Bot pass body
