@@ -21,6 +21,11 @@ class Method:
         return {}
 
 
+class Clean(Method):
+    name = 'clean all'
+    type_ = 'clean'
+
+
 class Client:
     """
     This client implements http-client
@@ -80,6 +85,11 @@ class Client:
             resp = self.__driver[self.db_name].drop_collection(col)
         elif method.type_ == 'collection_names':
             resp = self.__driver[self.db_name].collection_names(col)
+        elif method.type_ == 'clean':
+            names = self.__driver[self.db_name].collection_names(col)
+            for name in names:
+                _ = self.__driver[self.db_name].collection_names(name)
+            resp = {}
         else:
             raise NotImplemented('this method is not implemented')
         return method.response_process(resp)

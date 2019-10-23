@@ -1,3 +1,7 @@
+# 0.3.0
+
+* It was added method clean for remove all databases for mongodb
+
 # 0.2.2
 
 * Response processing error adding
