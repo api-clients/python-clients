@@ -33,7 +33,7 @@ class Method:
 
     @staticmethod
     def response_process(resp):
-        return {}
+        return resp
 
     @staticmethod
     def request_process(req):

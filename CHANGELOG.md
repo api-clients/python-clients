@@ -1,3 +1,7 @@
+# 0.5.0
+
+* response_process for http method return response of request
+
 # 0.4.0
 
 * Add basic auth for http like a python library requests
