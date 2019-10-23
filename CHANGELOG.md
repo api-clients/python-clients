@@ -1,3 +1,7 @@
+# 0.4.0
+
+* Add basic auth for http like a python library requests
+
 # 0.3.0
 
 * It was added method clean for remove all databases for mongodb

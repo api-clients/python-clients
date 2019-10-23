@@ -11,6 +11,7 @@ class Method:
     body = None
     params = None
     count = 0
+    auth = None
     """
     :arg name: name of method 
     :arg type_: type of method (GET, POST, PUT etc...)
@@ -19,6 +20,7 @@ class Method:
     :arg data: body of request
     :arg params: query params  
     :arg count: count params into path of url
+    :arg auth: requests authorisation
     """
 
     def __init__(self, *args):
@@ -54,28 +56,32 @@ class Client:
 
     def request(self, method):
         m_type = method.m_type
+        auth_ = method.auth
         url = self.__get_url(method)
         if m_type == 'GET':
             assert method.body is None, 'For GET method body must be empty'
             if self.proxies is None:
-                r = requests.get(url=url, params=method.params, headers=method.headers)
+                r = requests.get(url=url, params=method.params, headers=method.headers, auth=auth_)
             else:
-                r = requests.get(url=url, params=method.params, headers=method.headers, proxies=self.proxies)
+                r = requests.get(url=url, params=method.params, headers=method.headers, proxies=self.proxies, auth=auth_)
         elif m_type == 'POST':
             if self.proxies is None:
-                r = requests.post(url=url, params=method.params, data=method.body, headers=method.headers)
+                r = requests.post(url=url, params=method.params, data=method.body, headers=method.headers, auth=auth_)
             else:
-                r = requests.post(url=url, params=method.params, data=method.body, headers=method.headers, proxies=self.proxies)
+                r = requests.post(url=url, params=method.params, data=method.body, headers=method.headers,
+                                  proxies=self.proxies, auth=auth_)
         elif m_type == 'DELETE':
             if self.proxies is None:
-                r = requests.delete(url=url, params=method.params, data=method.body, headers=method.headers)
+                r = requests.delete(url=url, params=method.params, data=method.body, headers=method.headers, auth=auth_)
             else:
-                r = requests.delete(url=url, params=method.params, data=method.body, headers=method.headers, proxies=self.proxies)
+                r = requests.delete(url=url, params=method.params, data=method.body, headers=method.headers,
+                                    proxies=self.proxies, auth=auth_)
         elif m_type == 'PATCH':
             if self.proxies is None:
-                r = requests.patch(url=url, params=method.params, data=method.body, headers=method.headers)
+                r = requests.patch(url=url, params=method.params, data=method.body, headers=method.headers, auth=auth_)
             else:
-                r = requests.delete(url=url, params=method.params, data=method.body, headers=method.headers, proxies=self.proxies)
+                r = requests.delete(url=url, params=method.params, data=method.body, headers=method.headers,
+                                    proxies=self.proxies, auth=auth_)
         else:
             raise Exception("\nnot implemented method request: %s" % method.m_type)
         if r.status_code // 100 != 2:
