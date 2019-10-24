@@ -88,7 +88,8 @@ class Client:
         elif method.type_ == 'clean':
             names = self.__driver[self.db_name].collection_names(col)
             for name in names:
-                _ = self.__driver[self.db_name].collection_names(name)
+                if name != 'admin':
+                    _ = self.__driver[self.db_name].collection_names(name)
             resp = {}
         else:
             raise NotImplemented('this method is not implemented')

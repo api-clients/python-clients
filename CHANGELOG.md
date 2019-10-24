@@ -1,3 +1,7 @@
+# 0.5.1
+
+* while clean database of mongo, admin collection not delete
+
 # 0.5.0
 
 * response_process for http method return response of request
