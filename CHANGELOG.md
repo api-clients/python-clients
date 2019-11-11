@@ -1,3 +1,11 @@
+# 0.6.0
+
+* Add aggregation for mongodb client
+
+# 0.6.0
+
+* Mongo returns not empty response
+
 # 0.5.1
 
 * while clean database of mongo, admin collection not delete

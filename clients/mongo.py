@@ -18,7 +18,7 @@ class Method:
 
     @staticmethod
     def response_process(resp):
-        return {}
+        return resp
 
 
 class Clean(Method):
@@ -85,6 +85,8 @@ class Client:
             resp = self.__driver[self.db_name].drop_collection(col)
         elif method.type_ == 'collection_names':
             resp = self.__driver[self.db_name].collection_names(col)
+        elif method.type_ == 'aggregation':
+            resp = self.__driver[self.db_name][col].aggregate(query)
         elif method.type_ == 'clean':
             names = self.__driver[self.db_name].collection_names(col)
             for name in names:
