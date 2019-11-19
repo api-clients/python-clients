@@ -80,7 +80,13 @@ class Client:
             if self.proxies is None:
                 r = requests.patch(url=url, params=method.params, data=method.body, headers=method.headers, auth=auth_)
             else:
-                r = requests.delete(url=url, params=method.params, data=method.body, headers=method.headers,
+                r = requests.patch(url=url, params=method.params, data=method.body, headers=method.headers,
+                                    proxies=self.proxies, auth=auth_)
+        elif m_type == 'PUT':
+            if self.proxies is None:
+                r = requests.put(url=url, params=method.params, data=method.body, headers=method.headers, auth=auth_)
+            else:
+                r = requests.put(url=url, params=method.params, data=method.body, headers=method.headers,
                                     proxies=self.proxies, auth=auth_)
         else:
             raise Exception("\nnot implemented method request: %s" % method.m_type)

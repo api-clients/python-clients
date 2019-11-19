@@ -1,3 +1,7 @@
+# 0.7.0
+
+* Add method put for http client
+
 # 0.6.0
 
 * Add aggregation for mongodb client
