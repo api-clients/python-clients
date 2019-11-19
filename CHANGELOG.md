@@ -1,6 +1,7 @@
-# 0.7.0
+# 0.9.0
 
 * Add method put for http client
+* Methods for http client was changed signature for status_code and returns status code
 
 # 0.6.0
 

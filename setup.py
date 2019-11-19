@@ -15,7 +15,7 @@ print(install_reqs)
 
 setuptools.setup(
     name="python-clients",
-    version="0.8.0",
+    version="0.9.0",
     author="Egor Urvanov",
     author_email="hedgehogues@bk.ru",
     description="This library implements wrapper for different python interfaces",
