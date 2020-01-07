@@ -1,3 +1,7 @@
+# 0.10.0
+
+* Add FILE method for http
+
 # 0.9.0
 
 * Add method put for http client

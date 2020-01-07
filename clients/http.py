@@ -64,7 +64,7 @@ class Client:
                 r = requests.get(url=url, params=method.params, headers=method.headers, auth=auth_)
             else:
                 r = requests.get(url=url, params=method.params, headers=method.headers, proxies=self.proxies, auth=auth_)
-        elif m_type == 'POST':
+        elif m_type in ['POST', 'FILE']:
             if self.proxies is None:
                 r = requests.post(url=url, params=method.params, data=method.body, headers=method.headers, auth=auth_)
             else:
