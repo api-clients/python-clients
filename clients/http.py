@@ -1,26 +1,29 @@
 import logging
+import typing
 
 import requests
 
 
 class Method:
     name = '???'
-    type_ = '???'
-    _url = ''
+    m_type = '???'
+    url_ = ''
     headers = None
     body = None
     params = None
     count = 0
     auth = None
+    files = typing.List
     """
     :arg name: name of method 
-    :arg type_: type of method (GET, POST, PUT etc...)
+    :arg m_type: type of method (GET, POST, PUT etc...)
     :arg url: type of method (endpoint, for example: https://localhost:5000/api-docs. In this case is api-docs)
     :arg headers: headers for request
     :arg data: body of request
     :arg params: query params  
     :arg count: count params into path of url
     :arg auth: requests authorisation
+    :arg files: list of files
     """
 
     def __init__(self, *args):
@@ -29,7 +32,7 @@ class Method:
 
     @property
     def url(self):
-        return self._url % self.__args
+        return self.url_ % self.__args
 
     @staticmethod
     def response_process(resp, status_code):
@@ -64,7 +67,15 @@ class Client:
                 r = requests.get(url=url, params=method.params, headers=method.headers, auth=auth_)
             else:
                 r = requests.get(url=url, params=method.params, headers=method.headers, proxies=self.proxies, auth=auth_)
-        elif m_type in ['POST', 'FILE']:
+        elif m_type == 'FILE':
+            assert method.files is None, 'For FILE attribute file must not be empty'
+            if self.proxies is None:
+                r = requests.post(url=url, params=method.params, data=method.body, headers=method.headers, auth=auth_,
+                                  files=method.files)
+            else:
+                r = requests.post(url=url, params=method.params, data=method.body, headers=method.headers,
+                                  proxies=self.proxies, auth=auth_, files=method.files)
+        elif m_type == 'POST':
             if self.proxies is None:
                 r = requests.post(url=url, params=method.params, data=method.body, headers=method.headers, auth=auth_)
             else:
@@ -96,4 +107,4 @@ class Client:
             return method.response_process(r.json(), r.status_code)
         except Exception as e:
             logging.info(f'not a json response: {e}')
-            return method.response_process({})
+            return method.response_process({}, r.status_code)
