@@ -13,7 +13,7 @@ class Method:
     params = None
     count = 0
     auth = None
-    files = typing.List
+    files = typing.Dict
     """
     :arg name: name of method 
     :arg m_type: type of method (GET, POST, PUT etc...)
@@ -69,7 +69,7 @@ class Client:
                 r = requests.get(url=url, params=method.params, headers=method.headers, proxies=self.proxies, auth=auth_)
         elif m_type == 'FILE':
             assert method.files is None, 'For FILE attribute file must not be empty'
-            if self.proxies is None:
+            if self.proxies is not None:
                 r = requests.post(url=url, params=method.params, data=method.body, headers=method.headers, auth=auth_,
                                   files=method.files)
             else:
