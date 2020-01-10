@@ -1,3 +1,7 @@
+# 0.10.4
+
+* change assertion for files
+
 # 0.10.3
 
 * files into arguments requests if dictionary
