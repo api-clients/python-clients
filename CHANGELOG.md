@@ -1,3 +1,11 @@
+# 0.10.3
+
+* files into arguments requests if dictionary
+
+# 0.10.2
+
+* Method FILE pass into requests list of files
+
 # 0.10.0
 
 * Add FILE method for http
