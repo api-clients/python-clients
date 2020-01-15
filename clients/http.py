@@ -103,8 +103,8 @@ class Client:
             raise Exception("\nnot implemented method request: %s" % method.m_type)
         try:
             if r is None or len(r.content) == 0:
-                return method.response_process({})
+                return method.response_process({}, r.status_code)
             return method.response_process(r.json(), r.status_code)
         except Exception as e:
             logging.info(f'not a json response: {e}')
-            return method.response_process({}, r.status_code)
+            return method.response_process({}, 520)

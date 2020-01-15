@@ -1,3 +1,7 @@
+# 0.10.5
+
+* add status code for exception of http-client
+
 # 0.10.4
 
 * change assertion for files
