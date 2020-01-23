@@ -1,3 +1,4 @@
+import json
 import logging
 import typing
 
@@ -9,7 +10,7 @@ class Method:
     m_type = '???'
     url_ = ''
     headers = None
-    body = None
+    body_ = None
     params = None
     count = 0
     auth = None
@@ -17,9 +18,9 @@ class Method:
     """
     :arg name: name of method 
     :arg m_type: type of method (GET, POST, PUT etc...)
-    :arg url: type of method (endpoint, for example: https://localhost:5000/api-docs. In this case is api-docs)
+    :arg url_: type of method (endpoint, for example: https://localhost:5000/api-docs. In this case is api-docs)
     :arg headers: headers for request
-    :arg data: body of request
+    :arg body_: body of request
     :arg params: query params  
     :arg count: count params into path of url
     :arg auth: requests authorisation
@@ -42,6 +43,10 @@ class Method:
     def request_process(req):
         return req
 
+    @property
+    def body_(self):
+        return json.dumps(self.body)
+
 
 class Client:
     def __init__(self, endpoint, proxies=None):
@@ -62,7 +67,7 @@ class Client:
         auth_ = method.auth
         url = self.__get_url(method)
         if m_type == 'GET':
-            assert method.body is None, 'For GET method body must be empty'
+            assert method.body_ is None, 'For GET method body must be empty'
             if self.proxies is None:
                 r = requests.get(url=url, params=method.params, headers=method.headers, auth=auth_)
             else:
@@ -70,34 +75,34 @@ class Client:
         elif m_type == 'FILE':
             assert method.files is not None, 'For FILE attribute file must not be empty'
             if self.proxies is not None:
-                r = requests.post(url=url, params=method.params, data=method.body, headers=method.headers, auth=auth_,
+                r = requests.post(url=url, params=method.params, data=method.body_, headers=method.headers, auth=auth_,
                                   files=method.files)
             else:
-                r = requests.post(url=url, params=method.params, data=method.body, headers=method.headers,
+                r = requests.post(url=url, params=method.params, data=method.body_, headers=method.headers,
                                   proxies=self.proxies, auth=auth_, files=method.files)
         elif m_type == 'POST':
             if self.proxies is None:
-                r = requests.post(url=url, params=method.params, data=method.body, headers=method.headers, auth=auth_)
+                r = requests.post(url=url, params=method.params, data=method.body_, headers=method.headers, auth=auth_)
             else:
-                r = requests.post(url=url, params=method.params, data=method.body, headers=method.headers,
+                r = requests.post(url=url, params=method.params, data=method.body_, headers=method.headers,
                                   proxies=self.proxies, auth=auth_)
         elif m_type == 'DELETE':
             if self.proxies is None:
-                r = requests.delete(url=url, params=method.params, data=method.body, headers=method.headers, auth=auth_)
+                r = requests.delete(url=url, params=method.params, data=method.body_, headers=method.headers, auth=auth_)
             else:
-                r = requests.delete(url=url, params=method.params, data=method.body, headers=method.headers,
+                r = requests.delete(url=url, params=method.params, data=method.body_, headers=method.headers,
                                     proxies=self.proxies, auth=auth_)
         elif m_type == 'PATCH':
             if self.proxies is None:
-                r = requests.patch(url=url, params=method.params, data=method.body, headers=method.headers, auth=auth_)
+                r = requests.patch(url=url, params=method.params, data=method.body_, headers=method.headers, auth=auth_)
             else:
-                r = requests.patch(url=url, params=method.params, data=method.body, headers=method.headers,
+                r = requests.patch(url=url, params=method.params, data=method.body_, headers=method.headers,
                                     proxies=self.proxies, auth=auth_)
         elif m_type == 'PUT':
             if self.proxies is None:
-                r = requests.put(url=url, params=method.params, data=method.body, headers=method.headers, auth=auth_)
+                r = requests.put(url=url, params=method.params, data=method.body_, headers=method.headers, auth=auth_)
             else:
-                r = requests.put(url=url, params=method.params, data=method.body, headers=method.headers,
+                r = requests.put(url=url, params=method.params, data=method.body_, headers=method.headers,
                                     proxies=self.proxies, auth=auth_)
         else:
             raise Exception("\nnot implemented method request: %s" % method.m_type)

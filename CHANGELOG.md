@@ -1,3 +1,7 @@
+# 0.10.6
+
+* add unmarshalling and marshalling json
+
 # 0.10.5
 
 * add status code for exception of http-client
