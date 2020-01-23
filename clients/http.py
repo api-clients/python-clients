@@ -45,6 +45,8 @@ class Method:
 
     @property
     def body_(self):
+        if self.body is None:
+            return None
         return json.dumps(self.body)
 
 
