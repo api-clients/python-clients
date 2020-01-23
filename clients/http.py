@@ -10,7 +10,7 @@ class Method:
     m_type = '???'
     url_ = ''
     headers = None
-    body_ = None
+    body = None
     params = None
     count = 0
     auth = None
