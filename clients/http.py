@@ -50,21 +50,61 @@ class Method:
         return json.dumps(self.body)
 
 
+middleware_type_ = typing.List[typing.Callable[[Method], Method]]
+
+
 class Client:
-    def __init__(self, endpoint, proxies=None):
+    def __init__(self, endpoint: str, proxies: list = None, mdws: middleware_type_ = None,
+                 mdws_nc: middleware_type_ = None):
         """
         This client implements http-client
 
         :param endpoint: base url for requests
         :param proxies: dict with proxies ({'schema': 'endpoint'})
+        :param mdws: (middlewares) list of middlewares of methods. After calling source object of method has changes.
+                     This case more slowly, than mdws_nc. You must select mdws or mdws_nc
+            For example, you need add functionality for each methods. You can add the only argument to the constructor
+            of client. For example, you have 200 places with calling some method (in tests, for example), than, you can
+            add middleware in the only place.
+        :param mdws_nc: (middlewares not copy) list of middlewares of methods. After calling source object of method has
+                        changes. This case more faster, than mdws. You must select mdws or mdws_nc
         """
         self.endpoint = endpoint
         self.proxies = proxies
+        a = mdws is not None and mdws_nc is None
+        b = mdws is None and mdws_nc is not None
+        c = mdws is None and mdws_nc is None
+        assert a or b or c, 'you must set mdws or mdws_nc, but not both'
+        self.mdws = []
+        if mdws is not None:
+            self.mdws = mdws
+        self.mdws_nc = []
+        if mdws_nc is not None:
+            self.mdws_nc = mdws_nc
 
     def __get_url(self, method):
         return f'{self.endpoint}{method.url}'
 
+    def __middlewares(self, method_):
+        method = method_
+        for m in self.mdws:
+            method_ = m(method)
+            assert id(method_) != id(method), 'middleware must call copy for argument of method before ' \
+                                              'return: return copy.copy(m). See test test_request_middleware and ' \
+                                              'test_request_middleware_not_copy for example. If you want to use ' \
+                                              'middleware without copy, you need, mdws_nc argument in constructor'
+            method = method_
+        for m in self.mdws_nc:
+            method_ = m(method)
+            assert id(method_) == id(method), 'middleware must NOT call copy for argument of method. See test ' \
+                                              'test_request_middleware and test_request_middleware_not_copy for ' \
+                                              'example. If you want to use middleware with copy, you need, ' \
+                                              'mdws argument in constructor'
+            method = method_
+        return method
+
     def request(self, method):
+        method = self.__middlewares(method)
         m_type = method.m_type
         auth_ = method.auth
         url = self.__get_url(method)
@@ -99,19 +139,23 @@ class Client:
                 r = requests.patch(url=url, params=method.params, data=method.body_, headers=method.headers, auth=auth_)
             else:
                 r = requests.patch(url=url, params=method.params, data=method.body_, headers=method.headers,
-                                    proxies=self.proxies, auth=auth_)
+                                   proxies=self.proxies, auth=auth_)
         elif m_type == 'PUT':
             if self.proxies is None:
                 r = requests.put(url=url, params=method.params, data=method.body_, headers=method.headers, auth=auth_)
             else:
                 r = requests.put(url=url, params=method.params, data=method.body_, headers=method.headers,
-                                    proxies=self.proxies, auth=auth_)
+                                 proxies=self.proxies, auth=auth_)
         else:
-            raise Exception("\nnot implemented method request: %s" % method.m_type)
+            raise NotImplementedError("\nnot implemented method request: %s" % method.m_type)
         try:
-            if r is None or len(r.content) == 0:
+            r_ = r.json()
+        except:
+            r_ = r.content
+        try:
+            if r_ is None or len(r.content) == 0:
                 return method.response_process({}, r.status_code)
-            return method.response_process(r.json(), r.status_code)
+            return method.response_process(r_, r.status_code)
         except Exception as e:
             logging.info(f'not a json response: {e}')
             return method.response_process({}, 520)
