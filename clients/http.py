@@ -25,6 +25,15 @@ class Method:
     :arg count: count params into path of url
     :arg auth: requests authorisation
     :arg files: list of files
+        except:
+            r_ = r.content
+        try:
+            if r_ is None or len(r.content) == 0:
+                return method.response_process({}, r.status_code)
+            return method.response_process(r_, r.status_code)
+        except Exception as e:
+            logging.info(f'not a json response: {e}')
+            return method.response_process({}, 520)
     """
 
     def __init__(self, *args):
@@ -61,13 +70,13 @@ class Client:
 
         :param endpoint: base url for requests
         :param proxies: dict with proxies ({'schema': 'endpoint'})
-        :param mdws: (middlewares) list of middlewares of methods. After calling source object of method has changes.
+        :param mdws: (middlewares) list of middlewares of methods. After calling source object of method is changed.
                      This case more slowly, than mdws_nc. You must select mdws or mdws_nc
             For example, you need add functionality for each methods. You can add the only argument to the constructor
             of client. For example, you have 200 places with calling some method (in tests, for example), than, you can
             add middleware in the only place.
-        :param mdws_nc: (middlewares not copy) list of middlewares of methods. After calling source object of method has
-                        changes. This case more faster, than mdws. You must select mdws or mdws_nc
+        :param mdws_nc: (middlewares not copy) list of middlewares of methods. After calling source object of method is
+                        changed. This case more faster, than mdws. You must select mdws or mdws_nc
         """
         self.endpoint = endpoint
         self.proxies = proxies

@@ -1,5 +1,7 @@
 import setuptools
 
+import version
+
 
 def parse_requirements(filename):
     """ load requirements from a pip requirements file """
@@ -14,8 +16,8 @@ install_reqs = parse_requirements('./requirements')
 print(install_reqs)
 
 setuptools.setup(
-    name="python-clients",
-    version="0.10.8",
+    name=version.app_name,
+    version=version.app_version,
     author="Egor Urvanov",
     author_email="hedgehogues@bk.ru",
     description="This library implements wrapper for different python interfaces",

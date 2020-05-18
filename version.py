@@ -1,2 +1,2 @@
 app_name = "python-clients"
-version = "0.11.0"
+app_version = "0.11.0"
