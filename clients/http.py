@@ -133,8 +133,6 @@ class AsyncClient:
         assert files is None, "files files is not supported. please use {'file': open('file', 'rb')} and pass data"
         if m_type == 'get':
             assert body is None, 'for GET method body must be empty'
-        if m_type == 'file':
-            assert files is not None, 'for FILE attribute file must not be empty'
         resp = await self.__session.request(method=m_type, url=url, params=params, data=body, headers=headers,
                                             proxy=proxy, auth=auth_)
         try:

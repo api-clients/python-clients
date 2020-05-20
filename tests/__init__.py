@@ -50,6 +50,7 @@ class File(http.Method):
 class FileNoFileField(http.Method):
     url_ = '/'
     m_type = 'FILE'
+    files = {}
 
 
 class Undefined(http.Method):

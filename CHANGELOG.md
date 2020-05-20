@@ -1,3 +1,7 @@
+# 0.11.0
+
+* add async client
+
 # 0.10.6
 
 * add unmarshalling and marshalling json
