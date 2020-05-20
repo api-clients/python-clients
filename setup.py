@@ -1,6 +1,6 @@
 import setuptools
 
-import version
+import info
 
 
 def parse_requirements(filename):
@@ -16,8 +16,8 @@ install_reqs = parse_requirements('./requirements')
 print(install_reqs)
 
 setuptools.setup(
-    name=version.app_name,
-    version=version.app_version,
+    name=info.app_name,
+    version=info.app_version,
     author="Egor Urvanov",
     author_email="hedgehogues@bk.ru",
     description="This library implements wrapper for different python interfaces",
