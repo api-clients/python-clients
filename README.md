@@ -2,7 +2,7 @@
 
 This library implements wrapper for different python interfaces. We have:
 
-* http client
+* sync and async http client (requests and aiohttp)
 * mongodb client
 
 Each client is class with request method and class implemented base class of any custom methods. This is very simple. 
