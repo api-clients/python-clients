@@ -181,6 +181,13 @@ async def test_real_request():
     assert status_code == 200
 
 
+@pytest.mark.asyncio
+async def test_real_request_global_client():
+    resp, status_code = await tests.client.request(tests.Get())
+    assert len(resp) > 1000
+    assert status_code == 200
+
+
 def middleware(m):
     m_ = copy.deepcopy(m)
     m_.headers = {'test': 'test'}

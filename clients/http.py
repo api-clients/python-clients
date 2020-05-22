@@ -85,7 +85,7 @@ class AsyncClient:
         self.mdws_nc = []
         if mdws_nc is not None:
             self.mdws_nc = mdws_nc
-        self.__session = aiohttp.ClientSession()
+        self.__session = None
 
     def __get_url(self, method):
         return f'{self.endpoint}{method.url}'
@@ -109,6 +109,8 @@ class AsyncClient:
         return method
 
     async def resolve(self):
+        if self.__session is None:
+            return
         await self.__session.close()
 
     async def request(self, method: Method, proxy: str = None):
@@ -119,6 +121,8 @@ class AsyncClient:
         :param proxy: is url of proxy (example: http://proxy.com)
         :return:
         """
+        if self.__session is None:
+            self.__session = aiohttp.ClientSession()
         # TODO: two steps requests: 1. take headers; 2. take body (text or json)
         # TODO: add task to running event loop
         method = self.__middlewares(method)

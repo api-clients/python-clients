@@ -4,6 +4,9 @@ fake_url = 'https://ed.cba'
 real_url = 'https://yandex.ru'
 
 
+client = http.AsyncClient(real_url)
+
+
 class GetResponseProcess(http.Method):
     url_ = '/'
     m_type = 'GET'
