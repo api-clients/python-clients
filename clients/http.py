@@ -53,6 +53,8 @@ class Method:
     def body_(self):
         if self.body is None:
             return None
+        if isinstance(self.body, str):
+            return self.body
         return json.dumps(self.body)
 
 
