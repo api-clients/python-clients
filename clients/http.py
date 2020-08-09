@@ -53,9 +53,9 @@ class Method:
     def body_(self):
         if self.body is None:
             return None
-        if isinstance(self.body, str):
-            return self.body
-        return json.dumps(self.body)
+        if isinstance(self.body, dict):
+            return json.dumps(self.body)
+        return self.body
 
 
 middleware_type_ = typing.List[typing.Callable[[Method], Method]]
