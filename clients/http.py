@@ -110,6 +110,18 @@ class AsyncClient:
             method = method_
         return method
 
+    @staticmethod
+    def __add_files(files):
+        form = aiohttp.FormData()
+        for f in files:
+            form.add_field(
+                'files',
+                f[1],
+                filename=f[0],
+                content_type='multipart/form-data',
+            )
+        return form
+
     async def resolve(self):
         if self.__session is None:
             return
@@ -129,14 +141,17 @@ class AsyncClient:
         # TODO: add task to running event loop
         method = self.__middlewares(method)
         params = method.params
-        body = method.body_
         headers = method.headers
         m_type = method.m_type.lower()
         auth_ = method.auth
         proxy = proxy if proxy is not None else None
-        files = method.files if method.files is not None else None
         url = self.__get_url(method)
-        assert files is None, "files files is not supported. please use {'file': open('file', 'rb')} and pass data"
+        files = method.files if method.files is not None else None
+        body = method.body_
+        assert not (body is not None and files is not None), 'files and body cannot transfer at the same time'
+        assert files is not None and m_type == 'post' or files is None, 'files must transfer via POST request'
+        if files is not None:
+            body = self.__add_files(files)
         if m_type == 'get':
             assert body is None, 'for GET method body must be empty'
         resp = await self.__session.request(method=m_type, url=url, params=params, data=body, headers=headers,
