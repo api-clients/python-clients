@@ -2,7 +2,7 @@ import copy
 
 import pytest
 
-import tests
+from tests import unit
 from clients import http
 
 
@@ -44,85 +44,85 @@ class MockSessions:
 
 @pytest.mark.asyncio
 async def test_request_get_ok():
-    client = http.AsyncClient(tests.fake_url)
+    client = http.AsyncClient(unit.fake_url)
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='', failure=False)
-    resp, status_code = await client.request(tests.Get())
+    resp, status_code = await client.request(unit.Get())
     assert resp == {}
     assert status_code == 204
 
 
 @pytest.mark.asyncio
 async def test_request_get_failure():
-    client = http.AsyncClient(tests.fake_url)
+    client = http.AsyncClient(unit.fake_url)
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='', failure=True)
     with pytest.raises(TestException):
-        await client.request(tests.Get())
+        await client.request(unit.Get())
 
 
 @pytest.mark.asyncio
 async def test_request_get_body_failure():
-    client = http.AsyncClient(tests.fake_url)
+    client = http.AsyncClient(unit.fake_url)
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='', failure=True)
     with pytest.raises(AssertionError):
-        await client.request(tests.GetWithBody())
+        await client.request(unit.GetWithBody())
 
 
 @pytest.mark.asyncio
 async def test_request_post_ok():
-    client = http.AsyncClient(tests.fake_url)
+    client = http.AsyncClient(unit.fake_url)
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='')
-    resp, status_code = await client.request(tests.Post())
+    resp, status_code = await client.request(unit.Post())
     assert resp == {}
     assert status_code == 204
 
 
 @pytest.mark.asyncio
 async def test_request_post_failure():
-    client = http.AsyncClient(tests.fake_url)
+    client = http.AsyncClient(unit.fake_url)
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='', failure=True)
     with pytest.raises(TestException):
-        await client.request(tests.Post())
+        await client.request(unit.Post())
 
 
 @pytest.mark.asyncio
 async def test_request_put_ok():
-    client = http.AsyncClient(tests.fake_url)
+    client = http.AsyncClient(unit.fake_url)
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='')
-    resp, status_code = await client.request(tests.Put())
+    resp, status_code = await client.request(unit.Put())
     assert resp == {}
     assert status_code == 204
 
 
 @pytest.mark.asyncio
 async def test_request_put_failure():
-    client = http.AsyncClient(tests.fake_url)
+    client = http.AsyncClient(unit.fake_url)
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='', failure=True)
     with pytest.raises(TestException):
-        await client.request(tests.Put())
+        await client.request(unit.Put())
 
 
 @pytest.mark.asyncio
 async def test_request_patch_ok():
-    client = http.AsyncClient(tests.fake_url)
+    client = http.AsyncClient(unit.fake_url)
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='')
-    resp, status_code = await client.request(tests.Patch())
+    resp, status_code = await client.request(unit.Patch())
     assert resp == {}
     assert status_code == 204
 
 
 @pytest.mark.asyncio
 async def test_request_patch_failure():
-    client = http.AsyncClient(tests.fake_url)
+    client = http.AsyncClient(unit.fake_url)
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='', failure=True)
     with pytest.raises(TestException):
-        await client.request(tests.Patch())
+        await client.request(unit.Patch())
 
 
 @pytest.mark.asyncio
 async def test_request_files_ok():
-    client = http.AsyncClient(tests.fake_url)
+    client = http.AsyncClient(unit.fake_url)
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='')
-    m = tests.File()
+    m = unit.File()
     m.files = None
     resp, status_code = await client.request(m)
     assert resp == {}
@@ -131,59 +131,59 @@ async def test_request_files_ok():
 
 @pytest.mark.asyncio
 async def test_request_files_failure():
-    client = http.AsyncClient(tests.fake_url)
+    client = http.AsyncClient(unit.fake_url)
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='', failure=True)
     with pytest.raises(TestException):
-        m = tests.File()
+        m = unit.File()
         m.files = None
         await client.request(m)
 
 
 @pytest.mark.asyncio
 async def test_request_delete_ok():
-    client = http.AsyncClient(tests.fake_url)
+    client = http.AsyncClient(unit.fake_url)
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='')
-    resp, status_code = await client.request(tests.Delete())
+    resp, status_code = await client.request(unit.Delete())
     assert resp == {}
     assert status_code == 204
 
 
 @pytest.mark.asyncio
 async def test_request_delete_failure():
-    client = http.AsyncClient(tests.fake_url)
+    client = http.AsyncClient(unit.fake_url)
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='', failure=True)
     with pytest.raises(TestException):
-        await client.request(tests.Delete())
+        await client.request(unit.Delete())
 
 
 @pytest.mark.asyncio
 async def test_request_undefined():
-    client = http.AsyncClient(tests.fake_url)
+    client = http.AsyncClient(unit.fake_url)
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='', failure=True)
     with pytest.raises(TestException):
-        await client.request(tests.Undefined())
+        await client.request(unit.Undefined())
 
 
 @pytest.mark.asyncio
 async def test_response_process():
-    client = http.AsyncClient(tests.fake_url)
+    client = http.AsyncClient(unit.fake_url)
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='')
-    resp, status_code = await client.request(tests.GetResponseProcess())
+    resp, status_code = await client.request(unit.GetResponseProcess())
     assert resp is None
     assert status_code == 200
 
 
 @pytest.mark.asyncio
 async def test_real_request():
-    client = http.AsyncClient(tests.real_url)
-    resp, status_code = await client.request(tests.Get())
+    client = http.AsyncClient(unit.real_url)
+    resp, status_code = await client.request(unit.Get())
     assert len(resp) > 1000
     assert status_code == 200
 
 
 @pytest.mark.asyncio
 async def test_real_request_global_client():
-    resp, status_code = await tests.client.request(tests.Get())
+    resp, status_code = await unit.client.request(unit.Get())
     assert len(resp) > 1000
     assert status_code == 200
 
@@ -196,12 +196,12 @@ def middleware(m):
 
 @pytest.mark.asyncio
 async def test_request_mdws():
-    client = http.AsyncClient(tests.fake_url, mdws=[middleware])
+    client = http.AsyncClient(unit.fake_url, mdws=[middleware])
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='')
-    m = tests.Get()
+    m = unit.Get()
     resp, status_code = await client.request(m)
     assert resp == {}
-    assert tests.Get().__dict__ == m.__dict__
+    assert unit.Get().__dict__ == m.__dict__
     assert status_code == 204
 
 
@@ -212,28 +212,28 @@ def middleware_not_copy(m):
 
 @pytest.mark.asyncio
 async def test_request_mdws_not_copy():
-    client = http.Client(tests.fake_url, mdws=[middleware_not_copy])
+    client = http.Client(unit.fake_url, mdws=[middleware_not_copy])
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='')
-    m = tests.Get()
+    m = unit.Get()
     with pytest.raises(AssertionError):
         client.request(m)
 
 
 @pytest.mark.asyncio
 async def test_request_mdws_nc():
-    client = http.Client(tests.fake_url, mdws_nc=[middleware])
+    client = http.Client(unit.fake_url, mdws_nc=[middleware])
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='')
-    m = tests.Get()
+    m = unit.Get()
     with pytest.raises(AssertionError):
         client.request(m)
 
 
 @pytest.mark.asyncio
 async def test_request_mdws_nc_not_copy():
-    client = http.AsyncClient(tests.fake_url, mdws_nc=[middleware_not_copy])
+    client = http.AsyncClient(unit.fake_url, mdws_nc=[middleware_not_copy])
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='')
-    m = tests.Get()
+    m = unit.Get()
     resp, status_code = await client.request(m)
     assert resp == {}
-    assert tests.Get().__dict__ != m.__dict__
+    assert unit.Get().__dict__ != m.__dict__
     assert status_code == 204

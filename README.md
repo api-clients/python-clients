@@ -46,3 +46,9 @@ Next, you can take request:
     m = MyCustomSecondMethod(arg1=1, arg2=2, arg3=3)
     resp, status_code = await client.request(m)
     assert status_code == 204
+
+# Test
+
+If you want testing, you can try our unit-tests, you can do this:
+
+    pytests tests/unit/
