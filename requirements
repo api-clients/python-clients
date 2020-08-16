@@ -1,4 +1,0 @@
-requests==2.22.0
-pytest==5.4.1
-aiohttp==3.6.2
-pytest-asyncio==0.12.0
