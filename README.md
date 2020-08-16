@@ -22,18 +22,18 @@ You define new client for specify endpoint:
 Next, you define the first method:
 
     class MyCustomFirstMethod(http.Method):
-        url_ = '/'
+        url _ = '/'
         m_type = 'POST'
 
 Next, you define the second method:
 
     class MyCustomSecondMethod(http.Method):
-        url_ = '/%s'
+        url _ = '/%s'
         count = 1
         m_type = 'POST'
         
-        def __init__(self, arg1, arg2, arg3):
-            http.Method.__init__(self, arg1)  # arg1 pass into self.url_ by position
+        def __init __ (self, arg1, arg2, arg3):
+            http.Method. __init __ (self, arg1)  # arg1 pass into self.url _ by position
             self.params = {'args1': arg1}
             self.body = {'arg2': arg2}
             
@@ -51,4 +51,4 @@ Next, you can take request:
 
 If you want testing, you can try our unit-tests, you can do this:
 
-    pytests tests/unit/
+    pytests tests/unit/pyt
