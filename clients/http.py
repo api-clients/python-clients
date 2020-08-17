@@ -118,7 +118,7 @@ class AsyncClient:
                 'files',
                 f[1],
                 filename=f[0],
-                content_type='multipart/form-data',
+                content_type=f[2] if len(f) == 3 else None,
             )
         return form
 
