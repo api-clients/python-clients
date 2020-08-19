@@ -53,7 +53,7 @@ class Method:
     def body_(self):
         if self.body is None:
             return None
-        if isinstance(self.body, dict):
+        if isinstance(self.body, dict) or isinstance(self.body, list):
             return json.dumps(self.body)
         return self.body
 
@@ -227,7 +227,8 @@ class Client:
             if self.proxies is None:
                 r = requests.get(url=url, params=method.params, headers=method.headers, auth=auth_)
             else:
-                r = requests.get(url=url, params=method.params, headers=method.headers, proxies=self.proxies, auth=auth_)
+                r = requests.get(url=url, params=method.params, headers=method.headers, proxies=self.proxies,
+                                 auth=auth_)
         elif m_type == 'FILE':
             assert method.files is not None, 'For FILE attribute file must not be empty'
             if self.proxies is not None:
@@ -244,7 +245,8 @@ class Client:
                                   proxies=self.proxies, auth=auth_)
         elif m_type == 'DELETE':
             if self.proxies is None:
-                r = requests.delete(url=url, params=method.params, data=method.body_, headers=method.headers, auth=auth_)
+                r = requests.delete(url=url, params=method.params, data=method.body_, headers=method.headers,
+                                    auth=auth_)
             else:
                 r = requests.delete(url=url, params=method.params, data=method.body_, headers=method.headers,
                                     proxies=self.proxies, auth=auth_)

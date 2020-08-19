@@ -51,4 +51,4 @@ Next, you can take request:
 
 If you want testing, you can try our unit-tests, you can do this:
 
-    pytests tests/unit/pyt
+    pytest tests/unit
