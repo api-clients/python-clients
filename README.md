@@ -46,9 +46,22 @@ Next, you can take request:
     m = MyCustomSecondMethod(arg1=1, arg2=2, arg3=3)
     resp, status_code = await client.request(m)
     assert status_code == 204
+    
+    
+# Development
+
+You can install development requirements:
+
+    pip install -r requirements/dev
+    
+This is extension of package version of requirements
 
 # Test
 
-If you want testing, you can try our unit-tests, you can do this:
+Before tests, you need to start mock server:
 
-    pytest tests/unit
+    PYTHONPATH=. python tests/server/mock_server.py
+
+After that, you can run all tests:
+
+    pytest tests
