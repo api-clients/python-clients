@@ -6,3 +6,4 @@ fastapi>=0.46.0
 requests>=2.24.0
 aiohttp>=3.6.2
 cachecontrol>=0.12.5
+python-multipart>=0.0.5
