@@ -1,9 +1,22 @@
 import json
-import logging
 import typing
 
 import aiohttp
 import requests
+
+
+class RequestException(Exception):
+    """
+    This exception raises while request to server
+    """
+    pass
+
+
+class ResponseProcessException(Exception):
+    """
+    This exception raises while response process
+    """
+    pass
 
 
 class Method:
@@ -26,15 +39,6 @@ class Method:
     :arg count: count params into path of url
     :arg auth: requests authorisation
     :arg files: list of files
-        except:
-            r_ = r.content
-        try:
-            if r_ is None or len(r.content) == 0:
-                return method.response_process({}, r.status_code)
-            return method.response_process(r_, r.status_code)
-        except Exception as e:
-            logging.info(f'not a json response: {e}')
-            return method.response_process({}, 520)
     """
 
     def __init__(self, *args):
@@ -149,13 +153,17 @@ class AsyncClient:
         files = method.files if method.files is not None else None
         body = method.body_
         assert not (body is not None and files is not None), 'files and body cannot transfer at the same time'
-        assert files is not None and m_type == 'post' or files is None, 'files must transfer via POST request'
+        assert files is not None and m_type == 'file' or files is None, 'files must transfer via POST request'
         if files is not None:
+            m_type = 'post'
             body = self.__add_files(files)
         if m_type == 'get':
             assert body is None, 'for GET method body must be empty'
-        resp = await self.__session.request(method=m_type, url=url, params=params, data=body, headers=headers,
-                                            proxy=proxy, auth=auth_)
+        try:
+            resp = await self.__session.request(method=m_type, url=url, params=params, data=body, headers=headers,
+                                                proxy=proxy, auth=auth_)
+        except Exception as e:
+            raise RequestException(e)
         try:
             r_ = await resp.json()
         except:
@@ -163,8 +171,7 @@ class AsyncClient:
         try:
             return method.response_process(r_, resp.status)
         except Exception as e:
-            logging.info(f'not a json response: {e}')
-            return method.response_process({}, 520)
+            raise ResponseProcessException(e)
 
 
 class Client:
@@ -230,6 +237,7 @@ class Client:
                 r = requests.get(url=url, params=method.params, headers=method.headers, proxies=self.proxies,
                                  auth=auth_)
         elif m_type == 'FILE':
+            # TODO: change this m_type to POST method
             assert method.files is not None, 'For FILE attribute file must not be empty'
             if self.proxies is not None:
                 r = requests.post(url=url, params=method.params, data=method.body_, headers=method.headers, auth=auth_,
@@ -273,5 +281,4 @@ class Client:
                 return method.response_process({}, r.status_code)
             return method.response_process(r_, r.status_code)
         except Exception as e:
-            logging.info(f'not a json response: {e}')
-            return method.response_process({}, 520)
+            raise ResponseProcessException(e)
