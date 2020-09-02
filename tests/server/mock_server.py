@@ -36,7 +36,8 @@ async def file_method(file: UploadFile = File(...),):
 handler = '/file:response'
 @app.post(handler, status_code=200, response_model=None)
 async def file_method_response(file: UploadFile = File(...),):
-    return fastapi.responses.StreamingResponse(io.StringIO(str(await file.read())), media_type='text/plain')
+    b = (await file.read()).decode()
+    return fastapi.responses.StreamingResponse(io.StringIO(b), media_type='text/plain')
 
 
 if __name__ == "__main__":

@@ -1,3 +1,4 @@
+import collections
 import json
 import typing
 
@@ -19,16 +20,20 @@ class ResponseProcessException(Exception):
     pass
 
 
+AsyncFile = collections.namedtuple('AsyncFile', ['field', 'content', 'filename', 'content_type'])
+
+
 class Method:
-    name = '???'
-    m_type = '???'
-    url_ = ''
-    headers = None
-    body = None
-    params = None
-    count = 0
-    auth = None
-    files = None
+    name: str = '???'
+    m_type: str = '???'
+    url_: str = ''
+    headers: typing.Dict = None
+    body: typing.Union[typing.List, typing.Dict, bytes, str] = None
+    params: typing.Dict = None
+    count: int = 0
+    auth: typing.Tuple = None
+    files_async: typing.List[AsyncFile] = None
+    files_sync: typing.Dict = None
     """
     :arg name: name of method 
     :arg m_type: type of method (GET, POST, PUT etc...)
@@ -38,7 +43,8 @@ class Method:
     :arg params: query params  
     :arg count: count params into path of url
     :arg auth: requests authorisation
-    :arg files: list of files
+    :arg files_async: list with files for ASYNC method (key is field of server, value is file: name and content)
+    :arg files_sync: dict with files for SYNC method (key is field of server, value is file: name and content) 
     """
 
     def __init__(self, *args):
@@ -119,10 +125,10 @@ class AsyncClient:
         form = aiohttp.FormData()
         for f in files:
             form.add_field(
-                'files',
-                f[1],
-                filename=f[0],
-                content_type=f[2] if len(f) == 3 else None,
+                name=f.field,
+                value=f.content,
+                filename=f.filename,
+                content_type=f.content_type,
             )
         return form
 
@@ -150,7 +156,7 @@ class AsyncClient:
         auth_ = method.auth
         proxy = proxy if proxy is not None else None
         url = self.__get_url(method)
-        files = method.files if method.files is not None else None
+        files = method.files_async if method.files_async is not None else None
         body = method.body_
         assert not (body is not None and files is not None), 'files and body cannot transfer at the same time'
         assert files is not None and m_type == 'file' or files is None, 'files must transfer via POST request'
@@ -167,7 +173,7 @@ class AsyncClient:
         try:
             r_ = await resp.json()
         except:
-            r_ = await resp.text()
+            r_ = await resp.read()
         try:
             return method.response_process(r_, resp.status)
         except Exception as e:
@@ -238,13 +244,13 @@ class Client:
                                  auth=auth_)
         elif m_type == 'FILE':
             # TODO: change this m_type to POST method
-            assert method.files is not None, 'For FILE attribute file must not be empty'
+            assert method.files_sync is not None, 'For FILE attribute file must not be empty'
             if self.proxies is not None:
                 r = requests.post(url=url, params=method.params, data=method.body_, headers=method.headers, auth=auth_,
-                                  files=method.files)
+                                  files=method.files_sync)
             else:
                 r = requests.post(url=url, params=method.params, data=method.body_, headers=method.headers,
-                                  proxies=self.proxies, auth=auth_, files=method.files)
+                                  proxies=self.proxies, auth=auth_, files=method.files_sync)
         elif m_type == 'POST':
             if self.proxies is None:
                 r = requests.post(url=url, params=method.params, data=method.body_, headers=method.headers, auth=auth_)

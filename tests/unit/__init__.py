@@ -47,13 +47,13 @@ class Patch(http.Method):
 class File(http.Method):
     url_ = '/'
     m_type = 'FILE'
-    files = {}
+    files_sync = {}
 
 
 class FileNoFileField(http.Method):
     url_ = '/'
     m_type = 'FILE'
-    files = {}
+    files_sync = {}
 
 
 class Undefined(http.Method):
