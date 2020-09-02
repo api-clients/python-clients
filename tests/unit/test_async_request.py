@@ -55,7 +55,7 @@ async def test_request_get_ok():
 async def test_request_get_failure():
     client = http.AsyncClient(unit.fake_url)
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='', failure=True)
-    with pytest.raises(TestException):
+    with pytest.raises(http.RequestException):
         await client.request(unit.Get())
 
 
@@ -80,7 +80,7 @@ async def test_request_post_ok():
 async def test_request_post_failure():
     client = http.AsyncClient(unit.fake_url)
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='', failure=True)
-    with pytest.raises(TestException):
+    with pytest.raises(http.RequestException):
         await client.request(unit.Post())
 
 
@@ -97,7 +97,7 @@ async def test_request_put_ok():
 async def test_request_put_failure():
     client = http.AsyncClient(unit.fake_url)
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='', failure=True)
-    with pytest.raises(TestException):
+    with pytest.raises(http.RequestException):
         await client.request(unit.Put())
 
 
@@ -114,7 +114,7 @@ async def test_request_patch_ok():
 async def test_request_patch_failure():
     client = http.AsyncClient(unit.fake_url)
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='', failure=True)
-    with pytest.raises(TestException):
+    with pytest.raises(http.RequestException):
         await client.request(unit.Patch())
 
 
@@ -133,7 +133,7 @@ async def test_request_files_ok():
 async def test_request_files_failure():
     client = http.AsyncClient(unit.fake_url)
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='', failure=True)
-    with pytest.raises(TestException):
+    with pytest.raises(http.RequestException):
         m = unit.File()
         m.files = None
         await client.request(m)
@@ -152,7 +152,7 @@ async def test_request_delete_ok():
 async def test_request_delete_failure():
     client = http.AsyncClient(unit.fake_url)
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='', failure=True)
-    with pytest.raises(TestException):
+    with pytest.raises(http.RequestException):
         await client.request(unit.Delete())
 
 
@@ -160,7 +160,7 @@ async def test_request_delete_failure():
 async def test_request_undefined():
     client = http.AsyncClient(unit.fake_url)
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='', failure=True)
-    with pytest.raises(TestException):
+    with pytest.raises(http.RequestException):
         await client.request(unit.Undefined())
 
 
