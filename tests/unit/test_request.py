@@ -158,21 +158,17 @@ def test_request_files_ok():
     assert status_code == 204
 
 
-def test_request_multiple_files_ok():
+def test_request_data_ok():
     # Mock requests
     # http.requests = MockRequests(resp=None, code=204, content='')
     http.requests = req
-    src_path = Path.cwd().joinpath("tests", "data")
-    f_json = 'data_file1.json'
-    f1 = 'data_file1.txt'
-    f2 = 'data_file2.txt'
-    multiple_files = [('files', (f_json, open(src_path.joinpath(f_json), 'rb'), 'application/json')),
-                      ('files', (f1, open(src_path.joinpath(f1), 'rb'))),
-                      ('files', (f2, open(src_path.joinpath(f2), 'rb')))
-                      ]
+    data = {"data1": "data1",
+            "data2": 12345,
+            "data3": False
+            }
 
     client = http.Client(f"http://localhost:{port}")
-    resp, status_code = client.request(unit.ManyFiles(multiple_files))
+    resp, status_code = client.request(unit.DataDict(data))
     assert resp == {'success': True}
     assert status_code == 200
 
@@ -192,7 +188,7 @@ def test_request_multiple_files_and_data_ok():
 
     client = http.Client(f"http://localhost:{port}")
     resp, status_code = client.request(
-        unit.ManyFilesAndData(multiple_files,  body={"data1": "data1", "data2": 12345}))
+        unit.ManyFilesAndData(multiple_files, body={"data1": "data1", "data2": 12345}))
     assert resp == {'success': True}
     assert status_code == 200
 

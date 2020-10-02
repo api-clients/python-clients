@@ -173,6 +173,22 @@ async def test_request_multiple_files_and_data_ok():
 
 
 @pytest.mark.asyncio
+async def test_request_data_ok():
+    # Mock requests
+    # http.requests = MockRequests(resp=None, code=204, content='')
+    http.requests = req
+    data = {"data1": "data1",
+            "data2": 12345,
+            "data3": False
+            }
+
+    client = http.AsyncClient(f"http://localhost:{port}")
+    resp, status_code = await client.request(unit.DataDict(data))
+    assert resp == {'success': True}
+    assert status_code == 200
+
+
+@pytest.mark.asyncio
 async def test_request_files_failure():
     client = http.AsyncClient(unit.fake_url)
     client._AsyncClient__session = MockSessions(resp={}, code=204, content='', failure=True)

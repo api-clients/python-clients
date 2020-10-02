@@ -63,9 +63,10 @@ class Method:
     def body_(self):
         if self.body is None:
             return None
-        # if isinstance(self.body, dict) or isinstance(self.body, list):
-        #     return json.dumps(self.body)
-        if isinstance(self.body, list):
+        if self.m_type != "FILE":
+            if isinstance(self.body, dict) or isinstance(self.body, list):
+                return json.dumps(self.body)
+        elif isinstance(self.body, list):
             return json.dumps(self.body)
         return self.body
 

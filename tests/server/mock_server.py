@@ -7,6 +7,8 @@ from fastapi import UploadFile, File, Form
 from loguru import logger
 
 import tests
+from pydantic import BaseModel
+
 
 app = fastapi.FastAPI()
 
@@ -57,6 +59,24 @@ async def files_method(files: List[UploadFile] = File(...), data1: str = Form(..
     if data1 != "data1":
         raise fastapi.HTTPException(status_code=400)
     if data2 != 12345:
+        raise fastapi.HTTPException(status_code=400)
+    return {'success': True}
+
+
+class Item(BaseModel):
+    data1: str
+    data2: int
+    data3: bool
+
+handler = '/datadict'
+@app.post(handler, status_code=200)
+async def datadict_method(item: Item):
+    logger.debug(f"item {item}")
+    if item.data1 != "data1":
+        raise fastapi.HTTPException(status_code=400)
+    if item.data2 != 12345:
+        raise fastapi.HTTPException(status_code=400)
+    if item.data3:
         raise fastapi.HTTPException(status_code=400)
     return {'success': True}
 

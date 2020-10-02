@@ -37,7 +37,8 @@ deps-dev:
 
 
 publish-package:
-	$(ENVS) $(PYTHON) setup.py bdist_wheel upload -r private_pypi
+# 	$(ENVS) $(PYTHON) setup.py bdist_wheel upload -r private_pypi
+	$(ENVS) $(PYTHON) setup.py bdist_wheel upload -r pypi_egor
 
 
 clean:

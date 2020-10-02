@@ -1,4 +1,5 @@
 from clients import http
+import typing
 
 fake_url = 'https://ed.cba'
 real_url = 'https://yandex.ru'
@@ -89,6 +90,21 @@ class ManyFilesAndDataAsync(http.Method):
         http.Method.__init__(self)
         self.body = body
         self.files_async = files
+
+
+class DataDict(http.Method):
+    url_ = "/datadict"
+    m_type = "POST"
+    headers = {
+        'Content-Type': 'application/json',
+        'accept': 'application/json',
+    }
+
+    def __init__(self, data: typing.Dict):
+        http.Method.__init__(self)
+        # assert len(users) > 0, 'you must pass any users'
+        # assert isinstance(users, list), ' users must be list with any dicts'
+        self.body = data
 
 
 class FileNoFileField(http.Method):
