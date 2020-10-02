@@ -63,7 +63,9 @@ class Method:
     def body_(self):
         if self.body is None:
             return None
-        if isinstance(self.body, dict) or isinstance(self.body, list):
+        # if isinstance(self.body, dict) or isinstance(self.body, list):
+        #     return json.dumps(self.body)
+        if isinstance(self.body, list):
             return json.dumps(self.body)
         return self.body
 
@@ -121,7 +123,7 @@ class AsyncClient:
         return method
 
     @staticmethod
-    def __add_files(files):
+    def __add_files(files, body=None):
         form = aiohttp.FormData()
         for f in files:
             form.add_field(
@@ -130,6 +132,9 @@ class AsyncClient:
                 filename=f.filename,
                 content_type=f.content_type,
             )
+        if body is not None:
+            for key in body.keys():
+                form.add_field(key, str(body[key]))
         return form
 
     async def resolve(self):
@@ -158,11 +163,11 @@ class AsyncClient:
         url = self.__get_url(method)
         files = method.files_async if method.files_async is not None else None
         body = method.body_
-        assert not (body is not None and files is not None), 'files and body cannot transfer at the same time'
+        # assert not (body is not None and files is not None), 'files and body cannot transfer at the same time'
         assert files is not None and m_type == 'file' or files is None, 'files must transfer via POST request'
         if files is not None:
             m_type = 'post'
-            body = self.__add_files(files)
+            body = self.__add_files(files, method.body_)
         if m_type == 'get':
             assert body is None, 'for GET method body must be empty'
         try:

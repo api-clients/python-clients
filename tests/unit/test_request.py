@@ -1,9 +1,12 @@
 import copy
-
+from pathlib import Path
 import pytest
+from loguru import logger
 
-from tests import unit
+from tests import unit, port
 from clients import http
+
+req = http.requests
 
 
 class TestException(Exception):
@@ -153,6 +156,45 @@ def test_request_files_ok():
     resp, status_code = client.request(unit.File())
     assert resp == {}
     assert status_code == 204
+
+
+def test_request_multiple_files_ok():
+    # Mock requests
+    # http.requests = MockRequests(resp=None, code=204, content='')
+    http.requests = req
+    src_path = Path.cwd().joinpath("tests", "data")
+    f_json = 'data_file1.json'
+    f1 = 'data_file1.txt'
+    f2 = 'data_file2.txt'
+    multiple_files = [('files', (f_json, open(src_path.joinpath(f_json), 'rb'), 'application/json')),
+                      ('files', (f1, open(src_path.joinpath(f1), 'rb'))),
+                      ('files', (f2, open(src_path.joinpath(f2), 'rb')))
+                      ]
+
+    client = http.Client(f"http://localhost:{port}")
+    resp, status_code = client.request(unit.ManyFiles(multiple_files))
+    assert resp == {'success': True}
+    assert status_code == 200
+
+
+def test_request_multiple_files_and_data_ok():
+    # Mock requests
+    # http.requests = MockRequests(resp=None, code=204, content='')
+    http.requests = req
+    src_path = Path.cwd().joinpath("tests", "data")
+    f_json = 'data_file1.json'
+    f1 = 'data_file1.txt'
+    f2 = 'data_file2.txt'
+    multiple_files = [('files', (f_json, open(src_path.joinpath(f_json), 'rb'), 'application/json')),
+                      ('files', (f1, open(src_path.joinpath(f1), 'rb'))),
+                      ('files', (f2, open(src_path.joinpath(f2), 'rb')))
+                      ]
+
+    client = http.Client(f"http://localhost:{port}")
+    resp, status_code = client.request(
+        unit.ManyFilesAndData(multiple_files,  body={"data1": "data1", "data2": 12345}))
+    assert resp == {'success': True}
+    assert status_code == 200
 
 
 def test_request_files_failure():

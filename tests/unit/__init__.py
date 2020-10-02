@@ -3,7 +3,6 @@ from clients import http
 fake_url = 'https://ed.cba'
 real_url = 'https://yandex.ru'
 
-
 client = http.AsyncClient(real_url)
 
 
@@ -48,6 +47,48 @@ class File(http.Method):
     url_ = '/'
     m_type = 'FILE'
     files_sync = {}
+
+
+class ManyFiles(http.Method):
+    url = "/manyfiles"
+    m_type = "FILE"
+    auth = None
+
+    def __init__(self, files):  # typing.List):
+        http.Method.__init__(self)
+        self.files_sync = files
+
+
+class ManyFilesAsync(http.Method):
+    url = "/manyfiles"
+    m_type = "FILE"
+    auth = None
+
+    def __init__(self, files):  # typing.List):
+        http.Method.__init__(self)
+        self.files_async = files
+
+
+class ManyFilesAndData(http.Method):
+    url = "/manyfilesanddata"
+    m_type = "FILE"
+    auth = None
+
+    def __init__(self, files, body=None):  # typing.List):
+        http.Method.__init__(self)
+        self.body = body
+        self.files_sync = files
+
+
+class ManyFilesAndDataAsync(http.Method):
+    url = "/manyfilesanddata"
+    m_type = "FILE"
+    auth = None
+
+    def __init__(self, files, body=None):  # typing.List):
+        http.Method.__init__(self)
+        self.body = body
+        self.files_async = files
 
 
 class FileNoFileField(http.Method):
