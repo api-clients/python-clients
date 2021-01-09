@@ -1,5 +1,5 @@
 import io
-from typing import List, Dict, Optional
+from typing import List, Optional
 
 import fastapi
 import uvicorn
@@ -90,4 +90,4 @@ async def file_method_response(file: UploadFile = File(...),):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host='0.0.0.0', port=tests.port)
+    uvicorn.run(app, host='0.0.0.0', port=tests.server_port)

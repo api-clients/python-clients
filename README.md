@@ -1,67 +1,65 @@
-# Python-clients
+# python-clients
 
-This library implements wrapper for different python interfaces. We have:
+This library implements http python client by a functional style
 
-* sync and async http client (requests and aiohttp libraries)
+## Installing
 
-Each client is class with request method and class implemented base class of any custom methods. This is very simple. 
-But you can encapsulate inner structure of requests.
+Before work with our package, you need to install:
 
-# Installation
-
-We use python3.7. Installation is a very simple:
-
-    pip install python-clients
+    sudo apt-get install make
     
-# Example
+Make is not required features. This tools is needed for more useful development. We recommend to use Anaconda or another
+environment manager for safety system interpreter. 
 
-You define new client for specify endpoint: 
+You can download Anaconda [here](https://www.anaconda.com/). After installing Anaconda please create new environment:
 
-    client = http.AsyncClient(url)
-
-Next, you define the first method:
-
-    class MyCustomFirstMethod(http.Method):
-        url _ = '/'
-        m_type = 'POST'
-
-Next, you define the second method:
-
-    class MyCustomSecondMethod(http.Method):
-        url _ = '/%s'
-        count = 1
-        m_type = 'POST'
-        
-        def __init __ (self, arg1, arg2, arg3):
-            http.Method. __init __ (self, arg1)  # arg1 pass into self.url _ by position
-            self.params = {'args1': arg1}
-            self.body = {'arg2': arg2}
-            
-
-Next, you can take request:
-
-    m = MyCustomFirstMethod()
-    resp, status_code = await client.request(m)
-    assert status_code == 200
-    m = MyCustomSecondMethod(arg1=1, arg2=2, arg3=3)
-    resp, status_code = await client.request(m)
-    assert status_code == 204
+    conda create --name your-name python=3.*
+    conda activate python-clients
     
+or, you can do this:
+
+    make config
+    conda activate python-clients
+
+## Dependencies
+ 
+This command install all package dependencies:
+
+    make deps
     
-# Development
-
-You can install development requirements:
-
-    pip install -r requirements/dev
+## Publishing package
     
-This is extension of package version of requirements
+If you want to publish docker image into registry, you need to do this:
 
-# Test
+    make publish
+    
+## Clean
 
-Before tests, you need to start mock server:
+You can clean python package after building and all temporary files:
 
-    PYTHONPATH=. python tests/server/mock_server.py
+    make clean
 
-After that, you can run all tests:
+## Testing
+ 
+Before starting tests you need to start mock-server:
 
-    pytest tests
+    make run
+      
+Now, you can run tests:
+
+    make test
+    
+## Notice
+
+We use makefile as interface for communicate our application with our systems by command line while development and
+publishing.
+
+If you want more about publishing packages, you need can go 
+[here](https://github.com/U-Company/notes/tree/master/deployments).
+
+If you want to fork our repo, you can communicate with us. Egor Urvanov by UrvanovCompany@yandex.ru or in telegram (@cuda23)
+
+## Common errors
+
+If you have some errors, you can read
+[Common errors](data/docs/errors.md) doc. Or you can communicate with Egor Urvanov by UrvanovCompany@yandex.ru or in telegram (@cuda23)

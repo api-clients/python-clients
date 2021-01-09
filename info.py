@@ -1,2 +1,6 @@
-app_name = "python-clients"
-app_version = "1.2.1"
+name = 'python-clients'
+version = '2.0.0'
+description = 'This library implements http python client in a functional style'
+author = 'Egor Urvanov'
+email = 'UrvanovCompany@yandex.ru'
+python_version = '3.8'

@@ -2,6 +2,23 @@ import setuptools
 
 import info
 
+import os
+from distutils.command.register import register as register_orig
+from distutils.command.upload import upload as upload_orig
+
+from setuptools import setup
+
+
+class register(register_orig):
+
+    def _get_rc_file(self):
+        return os.path.join('.secrets/', '.pypirc')
+
+class upload(upload_orig):
+
+    def _get_rc_file(self):
+        return os.path.join('.secrets/', '.pypirc')
+
 
 def parse_requirements(filename):
     """ load requirements from a pip requirements file """
@@ -12,22 +29,27 @@ def parse_requirements(filename):
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+
 install_reqs = parse_requirements('./requirements/package')
-print(install_reqs)
+
 
 setuptools.setup(
-    name=info.app_name,
-    version=info.app_version,
-    author="Egor Urvanov",
-    author_email="hedgehogues@bk.ru",
-    description="This library implements wrapper for different python interfaces",
+    name=info.name,
+    version=info.version,
+    author=info.author,
+    author_email=info.email,
+    description=info.description,
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/Hedgehogues/python-clients",
-    packages=setuptools.find_packages(),
+    url=f'https://github.com/Hedgehogues/{info.name}',
+    packages=setuptools.find_packages(exclude=['tests', 'service']),
     classifiers=[
-        "Programming Language :: Python :: 3.7",
+        f"Programming Language :: Python :: {info.python_version}",
         "Operating System :: OS Independent",
     ],
+    cmdclass={
+        'register': register,
+        'upload': upload,
+    },
     install_requires=install_reqs,
 )

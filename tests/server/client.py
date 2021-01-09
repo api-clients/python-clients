@@ -1,4 +1,4 @@
-from clients import http
+from python_clients import http
 
 
 class Raise(http.Method):

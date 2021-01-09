@@ -3,26 +3,26 @@ import io
 import pytest
 
 import tests
-from clients import http
+from python_clients import http
 from tests.server import client
 
 
 def test_get():
-    client_ = http.Client(f'http://localhost:{tests.port}')
+    client_ = http.Client(tests.server_endpoint)
     m = client.Get()
     resp, status_code = client_.request(m)
     assert status_code == 200
 
 
 def test_post():
-    client_ = http.Client(f'http://localhost:{tests.port}')
+    client_ = http.Client(tests.server_endpoint)
     m = client.Post()
     resp, status_code = client_.request(m)
     assert status_code == 200
 
 
 def test_raise():
-    client_ = http.Client(f'http://localhost:{tests.port}')
+    client_ = http.Client(tests.server_endpoint)
     m = client.Raise()
     resp, status_code = client_.request(m)
     assert status_code == 400
@@ -30,7 +30,7 @@ def test_raise():
 
 @pytest.mark.asyncio
 async def test_file_async_request():
-    client_ = http.AsyncClient(f'http://localhost:{tests.port}')
+    client_ = http.AsyncClient(tests.server_endpoint)
     m = client.AsyncFileRequest(io.StringIO('123'))
     resp, status_code = await client_.request(m)
     assert status_code == 200
@@ -38,7 +38,7 @@ async def test_file_async_request():
 
 @pytest.mark.asyncio
 async def test_file_sync_request():
-    client_ = http.Client(f'http://localhost:{tests.port}')
+    client_ = http.Client(tests.server_endpoint)
     m = client.SyncFileRequest(io.StringIO('123'))
     resp, status_code = client_.request(m)
     assert status_code == 200
@@ -46,7 +46,7 @@ async def test_file_sync_request():
 
 @pytest.mark.asyncio
 async def test_file_async_response():
-    client_ = http.AsyncClient(f'http://localhost:{tests.port}')
+    client_ = http.AsyncClient(tests.server_endpoint)
     m = client.AsyncFileResponse(io.StringIO('123a'))
     resp, status_code = await client_.request(m)
     assert status_code == 200
@@ -55,7 +55,7 @@ async def test_file_async_response():
 
 @pytest.mark.asyncio
 async def test_file_sync_response():
-    client_ = http.Client(f'http://localhost:{tests.port}')
+    client_ = http.Client(tests.server_endpoint)
     m = client.SyncFileResponse(io.StringIO('123a'))
     resp, status_code = client_.request(m)
     assert status_code == 200
